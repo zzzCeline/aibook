@@ -426,9 +426,13 @@ function askAI() {
 // ==================== 聊天模块 ====================
 
 function openChat(selectedText) {
-    if (!state.currentBookId) return;
+    if (!state.currentBookId) {
+        showToast('请先在书架上点击一本书开始阅读 📖');
+        return;
+    }
 
     const book = getBookById(state.currentBookId);
+    if (!book) return;
     document.getElementById('chat-book-title').textContent = book.title;
 
     state.selectedText = selectedText || '';
@@ -511,6 +515,11 @@ async function sendMessage() {
 
     const bookId = state.currentBookId;
     const book = getBookById(bookId);
+    if (!book) {
+        showToast('请先从书架打开一本书 📖');
+        return;
+    }
+
     const history = getChatHistory(bookId);
 
     // 添加用户消息
@@ -520,10 +529,11 @@ async function sendMessage() {
     renderChat();
     scrollChatBottom();
 
-    // 显示加载
+    // 显示加载状态
     state.isLoadingAI = true;
     document.getElementById('typing-indicator').classList.add('visible');
     document.getElementById('btn-send').disabled = true;
+    document.getElementById('btn-send').textContent = '…';
     scrollChatBottom();
 
     try {
@@ -538,9 +548,18 @@ async function sendMessage() {
             saveChatHistory(bookId);
         }
     } catch (e) {
+        console.error('AI调用失败:', e.message);
+        // 显示具体错误
+        let errMsg = '抱歉，AI 暂时无法回复。';
+        if (e.message.includes('API Key')) errMsg = '❌ API Key 无效，请在 config.js 中填写正确的 DeepSeek API Key。';
+        else if (e.message.includes('429') || e.message.includes('频繁')) errMsg = '⏳ 请求太频繁，请稍后再试。';
+        else if (e.message.includes('Failed to fetch') || e.message.includes('Network')) errMsg = '📡 网络连接失败，请检查网络后重试。';
+        else errMsg = '❌ ' + e.message;
+
+        showToast(errMsg);
         history.push({
             role: 'ai',
-            content: '抱歉，AI 暂时无法回复。请检查网络连接和 API Key 配置后重试。',
+            content: errMsg,
             character: state.currentCharacter,
             timestamp: Date.now(),
         });
@@ -549,6 +568,7 @@ async function sendMessage() {
         state.isLoadingAI = false;
         document.getElementById('typing-indicator').classList.remove('visible');
         document.getElementById('btn-send').disabled = false;
+        document.getElementById('btn-send').textContent = '➤';
         renderChat();
         scrollChatBottom();
     }
@@ -598,20 +618,26 @@ async function callDeepSeek(bookId, book, history, currentMsg) {
     }
 
     // 调用 API
-    const response = await fetch(CONFIG.apiUrl, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${DEEPSEEK_API_KEY}`,
-        },
-        body: JSON.stringify({
-            model: CONFIG.model,
-            messages: messages,
-            temperature: CONFIG.temperature,
-            max_tokens: CONFIG.maxTokens,
-            stream: false,
-        }),
-    });
+    let response;
+    try {
+        response = await fetch(CONFIG.apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${DEEPSEEK_API_KEY}`,
+            },
+            body: JSON.stringify({
+                model: CONFIG.model,
+                messages: messages,
+                temperature: CONFIG.temperature,
+                max_tokens: CONFIG.maxTokens,
+                stream: false,
+            }),
+        });
+    } catch (netErr) {
+        console.error('网络错误:', netErr);
+        throw new Error('Network: ' + netErr.message);
+    }
 
     if (!response.ok) {
         const status = response.status;
