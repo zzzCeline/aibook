@@ -1,0 +1,852 @@
+/* ========================================================
+                    AI书伴 — 样式文件 (Mobile-First)
+   设计理念：温暖治愈书房风 | 色彩：暖棕+米白+墨绿+淡金
+   ======================================================== */
+
+/* ========== CSS 变量 ========== */
+:root {
+    --wood: #6B4226;
+    --wood-dark: #4A2C17;
+    --cream: #F5ECD7;
+    --warm-white: #FFFDF7;
+    --sage: #4A6741;
+    --gold: #C8A96E;
+    --mint: #C8E6C9;
+    --light-gray: #F0F0F0;
+    --text-dark: #333333;
+    --text-mid: #666666;
+    --text-light: #999999;
+    --border: #E0D8C8;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --shadow: 0 2px 12px rgba(74, 44, 23, 0.10);
+    --shadow-lg: 0 4px 24px rgba(74, 44, 23, 0.15);
+}
+
+/* ========== 基础重置 ========== */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--warm-white);
+    color: var(--text-dark);
+    line-height: 1.6;
+    max-width: 480px;
+    margin: 0 auto;
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+/* ========== 页面容器 ========== */
+.app {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+}
+
+.page {
+    display: none;
+    flex-direction: column;
+    min-height: 100vh;
+    min-height: 100dvh;
+    animation: fadeIn 0.28s ease;
+}
+
+.page.active {
+    display: flex;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ========== 顶部导航栏 ========== */
+.top-nav {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    background: var(--wood);
+    color: #FFFFFF;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    flex-shrink: 0;
+    gap: 10px;
+}
+
+.top-nav .nav-back {
+    background: none;
+    border: none;
+    color: #FFF;
+    font-size: 18px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.top-nav .nav-back:active {
+    background: rgba(255,255,255,0.15);
+}
+
+.top-nav .nav-title {
+    flex: 1;
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    letter-spacing: 0.5px;
+}
+
+.top-nav .nav-action {
+    background: none;
+    border: none;
+    color: #FFF;
+    font-size: 16px;
+    min-width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.top-nav .nav-action:active {
+    background: rgba(255,255,255,0.15);
+}
+
+/* ========== 搜索框 ========== */
+.search-area {
+    padding: 14px 16px;
+    background: linear-gradient(180deg, var(--wood) 0%, var(--warm-white) 100%);
+    position: sticky;
+    top: 50px;
+    z-index: 50;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    background: #FFF;
+    border-radius: 24px;
+    padding: 0 16px;
+    height: 44px;
+    box-shadow: var(--shadow);
+    border: 1.5px solid transparent;
+    transition: border-color 0.2s;
+}
+
+.search-box:focus-within {
+    border-color: var(--gold);
+}
+
+.search-box .search-icon {
+    font-size: 18px;
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
+.search-box input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    color: var(--text-dark);
+    background: transparent;
+    min-width: 0;
+}
+
+.search-box input::placeholder {
+    color: var(--text-light);
+}
+
+.search-clear {
+    background: none;
+    border: none;
+    color: var(--text-light);
+    font-size: 16px;
+    cursor: pointer;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-clear.visible {
+    display: flex;
+}
+
+/* ========== 搜索结果 ========== */
+.search-results {
+    padding: 0 16px 8px;
+    display: none;
+}
+
+.search-results.visible {
+    display: block;
+}
+
+.search-results .results-label {
+    font-size: 13px;
+    color: var(--text-mid);
+    margin-bottom: 10px;
+}
+
+/* ========== 书架区域 ========== */
+.shelf-area {
+    flex: 1;
+    padding: 8px 16px 24px;
+    background: linear-gradient(180deg, #F5ECD7 0%, #EDE3CC 50%, #E8DCC0 100%);
+    background-image:
+        repeating-linear-gradient(90deg, transparent, transparent 3px, rgba(139, 69, 19, 0.04) 3px, rgba(139, 69, 19, 0.04) 4px);
+    min-height: 300px;
+}
+
+.shelf-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 14px;
+    padding-top: 4px;
+}
+
+.shelf-label .shelf-icon {
+    font-size: 22px;
+}
+
+.shelf-label .shelf-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--wood-dark);
+    letter-spacing: 0.5px;
+}
+
+.shelf-label .shelf-count {
+    font-size: 13px;
+    color: var(--text-mid);
+    background: rgba(107,66,38,0.08);
+    padding: 2px 10px;
+    border-radius: 12px;
+}
+
+/* ========== 书籍网格 ========== */
+.book-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+}
+
+.book-card {
+    background: #FFF;
+    border-radius: var(--radius);
+    padding: 20px 14px 16px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    position: relative;
+    overflow: hidden;
+    -webkit-user-select: none;
+    user-select: none;
+    border: 1px solid var(--border);
+}
+
+.book-card:active {
+    transform: scale(0.97);
+    box-shadow: var(--shadow-lg);
+}
+
+.book-card .book-cover {
+    font-size: 52px;
+    line-height: 1;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.book-card .book-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.book-card .book-author {
+    font-size: 13px;
+    color: var(--text-mid);
+}
+
+.book-card .book-dynasty {
+    font-size: 11px;
+    color: var(--text-light);
+    margin-top: 2px;
+}
+
+.book-card .book-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 11px;
+    background: var(--cream);
+    color: var(--wood);
+    padding: 2px 8px;
+    border-radius: 10px;
+}
+
+/* ========== 空白引导 ========== */
+.empty-shelf {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-mid);
+}
+
+.empty-shelf .empty-icon {
+    font-size: 64px;
+    display: block;
+    margin-bottom: 16px;
+    opacity: 0.6;
+}
+
+.empty-shelf .empty-text {
+    font-size: 15px;
+    line-height: 1.8;
+}
+
+/* ========== 删除弹窗 ========== */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 200;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-overlay.visible {
+    display: flex;
+}
+
+.modal-box {
+    background: #FFF;
+    border-radius: 16px;
+    padding: 28px 24px 20px;
+    width: calc(100% - 60px);
+    max-width: 340px;
+    text-align: center;
+    box-shadow: var(--shadow-lg);
+}
+
+.modal-box .modal-icon {
+    font-size: 40px;
+    margin-bottom: 12px;
+}
+
+.modal-box .modal-text {
+    font-size: 16px;
+    color: var(--text-dark);
+    margin-bottom: 8px;
+    line-height: 1.6;
+}
+
+.modal-box .modal-sub {
+    font-size: 13px;
+    color: var(--text-light);
+    margin-bottom: 20px;
+}
+
+.modal-box .modal-btns {
+    display: flex;
+    gap: 12px;
+}
+
+.modal-box .modal-btns button {
+    flex: 1;
+    height: 44px;
+    border-radius: 22px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: transform 0.1s;
+}
+
+.modal-box .modal-btns button:active {
+    transform: scale(0.96);
+}
+
+.modal-box .btn-cancel {
+    background: var(--light-gray);
+    color: var(--text-mid);
+}
+
+.modal-box .btn-confirm {
+    background: var(--wood);
+    color: #FFF;
+}
+
+/* ========== 提示消息 ========== */
+.toast {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--wood-dark);
+    color: #FFF;
+    padding: 10px 24px;
+    border-radius: 20px;
+    font-size: 14px;
+    z-index: 300;
+    animation: toastAnim 2s ease forwards;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+@keyframes toastAnim {
+    0%   { opacity: 0; transform: translateX(-50%) translateY(10px); }
+    15%  { opacity: 1; transform: translateX(-50%) translateY(0); }
+    75%  { opacity: 1; transform: translateX(-50%) translateY(0); }
+    100% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+}
+
+/* ========== 阅读器页面 ========== */
+.reader-page {
+    background: var(--cream);
+}
+
+.reader-content {
+    flex: 1;
+    padding: 20px 18px 80px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    user-select: text;
+    -webkit-user-select: text;
+}
+
+.reader-content .chapter-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--wood-dark);
+    text-align: center;
+    margin-bottom: 24px;
+    letter-spacing: 1px;
+}
+
+.reader-content .chapter-text {
+    font-size: 18px;
+    line-height: 1.9;
+    color: var(--text-dark);
+    letter-spacing: 0.3px;
+}
+
+.reader-content .chapter-text p {
+    margin-bottom: 1em;
+    text-indent: 2em;
+}
+
+/* ========== 章节导航 ========== */
+.chapter-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    gap: 12px;
+    background: rgba(255,253,247,0.95);
+    border-top: 1px solid var(--border);
+}
+
+.chapter-nav button {
+    flex: 1;
+    height: 44px;
+    border-radius: 22px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1.5px solid var(--wood);
+    background: #FFF;
+    color: var(--wood);
+    transition: all 0.15s;
+    max-width: 110px;
+}
+
+.chapter-nav button:active {
+    background: var(--wood);
+    color: #FFF;
+}
+
+.chapter-nav button:disabled {
+    opacity: 0.35;
+    pointer-events: none;
+}
+
+.chapter-nav .chapter-indicator {
+    font-size: 13px;
+    color: var(--text-mid);
+    text-align: center;
+}
+
+.chapter-nav .more-hint {
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-light);
+    padding: 8px 0;
+    font-style: italic;
+}
+
+/* ========== 阅读器底部聊天按钮 ========== */
+.btn-chat-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    height: 48px;
+    background: var(--wood);
+    color: #FFF;
+    border: none;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    transition: background 0.15s;
+}
+
+.btn-chat-bar:active {
+    background: var(--wood-dark);
+}
+
+/* ========== 选中文字弹出按钮 ========== */
+.ask-ai-popup {
+    position: absolute;
+    z-index: 60;
+    background: var(--wood);
+    color: #FFF;
+    border-radius: 20px;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+    cursor: pointer;
+    display: none;
+    white-space: nowrap;
+    border: none;
+    transform: translateX(-50%);
+    animation: popIn 0.2s ease;
+}
+
+.ask-ai-popup.visible {
+    display: block;
+}
+
+@keyframes popIn {
+    from { opacity: 0; transform: translateX(-50%) scale(0.8); }
+    to   { opacity: 1; transform: translateX(-50%) scale(1); }
+}
+
+/* ========== 聊天室页面 ========== */
+.chat-page {
+    background: var(--warm-white);
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 16px 14px;
+    display: none;
+    background: var(--warm-white);
+}
+
+/* ========== 聊天气泡 ========== */
+.chat-bubble {
+    max-width: 82%;
+    padding: 12px 16px;
+    border-radius: 18px;
+    font-size: 16px;
+    line-height: 1.65;
+    word-break: break-word;
+    animation: slideUp 0.3s ease;
+    position: relative;
+}
+
+.chat-bubble-user {
+    align-self: flex-end;
+    background: var(--mint);
+    color: var(--text-dark);
+    border-bottom-right-radius: 6px;
+}
+
+.chat-bubble-ai {
+    align-self: flex-start;
+    background: var(--light-gray);
+    color: var(--text-dark);
+    border-bottom-left-radius: 6px;
+}
+
+/* ========== 引用消息 ========== */
+.chat-quote {
+    align-self: center;
+    background: #FFF;
+    border-left: 3px solid var(--gold);
+    padding: 12px 16px;
+    border-radius: 4px;
+    max-width: 90%;
+    font-style: italic;
+    color: var(--text-mid);
+    font-size: 15px;
+    line-height: 1.7;
+    animation: slideUp 0.3s ease;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+
+.chat-quote .quote-label {
+    font-style: normal;
+    font-size: 12px;
+    color: var(--gold);
+    font-weight: 600;
+    margin-bottom: 6px;
+    display: block;
+    letter-spacing: 0.5px;
+}
+
+/* ========== AI正在输入 ========== */
+.typing-indicator {
+    align-self: flex-start;
+    background: var(--light-gray);
+    border-radius: 18px;
+    border-bottom-left-radius: 6px;
+    padding: 14px 18px;
+    display: none;
+}
+
+.typing-indicator.visible {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+
+.typing-indicator .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--text-light);
+    animation: dotBounce 1.4s infinite;
+}
+
+.typing-indicator .dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-indicator .dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes dotBounce {
+    0%, 60%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-6px); }
+}
+
+/* ========== 底部输入栏 ========== */
+.chat-input-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: #FFF;
+    border-top: 1px solid var(--border);
+    padding-bottom: max(10px, env(safe-area-inset-bottom));
+}
+
+.chat-input-bar input {
+    flex: 1;
+    height: 44px;
+    border-radius: 22px;
+    border: 1.5px solid var(--border);
+    padding: 0 18px;
+    font-size: 16px;
+    outline: none;
+    color: var(--text-dark);
+    background: var(--warm-white);
+    min-width: 0;
+    transition: border-color 0.2s;
+}
+
+.chat-input-bar input:focus {
+    border-color: var(--gold);
+}
+
+.chat-input-bar .btn-send {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--wood);
+    color: #FFF;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.1s, opacity 0.2s;
+}
+
+.chat-input-bar .btn-send:active {
+    transform: scale(0.93);
+}
+
+.chat-input-bar .btn-send:disabled {
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+/* ========== 角色选择弹窗 ========== */
+.character-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 200;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.character-modal.visible {
+    display: flex;
+}
+
+.character-panel {
+    background: #FFF;
+    border-radius: 16px;
+    padding: 20px;
+    width: calc(100% - 50px);
+    max-width: 340px;
+    box-shadow: var(--shadow-lg);
+}
+
+.character-panel .panel-title {
+    font-size: 17px;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 16px;
+    color: var(--wood-dark);
+}
+
+.character-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: background 0.15s;
+    border: 1.5px solid transparent;
+}
+
+.character-option:active {
+    background: var(--cream);
+}
+
+.character-option.selected {
+    background: var(--cream);
+    border-color: var(--gold);
+}
+
+.character-option .char-emoji {
+    font-size: 28px;
+    width: 40px;
+    text-align: center;
+}
+
+.character-option .char-info {
+    flex: 1;
+}
+
+.character-option .char-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.character-option .char-desc {
+    font-size: 12px;
+    color: var(--text-mid);
+    margin-top: 2px;
+}
+
+/* ========== 空聊天提示 ========== */
+.chat-empty {
+    text-align: center;
+    color: var(--text-mid);
+    padding: 60px 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.chat-empty .empty-emoji {
+    font-size: 56px;
+    display: block;
+    margin-bottom: 16px;
+}
+
+.chat-empty .empty-hint {
+    font-size: 15px;
+    line-height: 2;
+}
+
+/* ========== 错误/网络提示 ========== */
+.error-banner {
+    background: #FFF3E0;
+    color: #E65100;
+    padding: 10px 16px;
+    font-size: 14px;
+    text-align: center;
+    display: none;
+}
+
+.error-banner.visible {
+    display: block;
+}
+
+/* ========== 安全区域适配 ========== */
+@supports (padding-top: env(safe-area-inset-top)) {
+    .top-nav {
+        padding-top: env(safe-area-inset-top);
+        height: calc(50px + env(safe-area-inset-top));
+    }
+    .search-area {
+        top: calc(50px + env(safe-area-inset-top));
+    }
+}
